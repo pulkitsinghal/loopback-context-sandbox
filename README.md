@@ -14,7 +14,6 @@
      mv ./node_modules ./npm2-node5/   && \
   2. cd 5.12.0 && npm install
 
-
 ### FAQ
 * Why was this project created?
  * To provide a quick way to experiment with loopback and mongo together.
@@ -40,21 +39,26 @@ npm install
 docker-compose up
 ```
 
-curl -XPOST http://localhost:3002/api/Users \
+### Testing for loopbackContext
+
+1. Create a user. Since all loopback servers in thei project  share the same mongo backend, only need to do this once:
+
+  ```
+  curl -XPOST http://localhost:3002/api/Users \
   -H "Content-Type: application/json" \
   -d '{
     "email": "one@one.com",
     "password": "111111"
   }'
-
-{"email":"one@one.com","id":"5807cd7e1d996a01008d79e3"}
-
-curl -XPOST http://localhost:3002/api/Users/login \
+  ```
+2. Login with the new user to get the accessToken. Since all loopback servers in thei project  share the same mongo backend, only need to do this once:
+  ```
+  curl -XPOST http://localhost:3002/api/Users/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "one@one.com",
     "password": "111111"
   }'
-
-{"id":"14fY6XdoLJ7Cl9J0qwdDl1K9D7am8PT9N17RU1vWplXFlypFhfIYA6g77SBRQEgm","ttl":1209600,"created":"2016-10-19T19:46:30.314Z","userId":"5807cd7e1d996a01008d79e3"}
+  ```
+3. Take the accessToken value and use it with each server's `localhost:[PORT]/explorer` to test if loopbackContext is working
 

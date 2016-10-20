@@ -15,8 +15,7 @@ RUN apt-get install -y less
 RUN mkdir -p /apps/loopback-mongo-sandbox
 WORKDIR /apps/loopback-mongo-sandbox
 
-COPY . /apps/loopback-mongo-sandbox
-RUN mv 5.12.0/* .
+COPY ./5.12.0 /apps/loopback-mongo-sandbox
 
 EXPOSE 3000
 CMD [ "node","server/server.js" ]
