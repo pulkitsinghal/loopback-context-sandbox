@@ -1,5 +1,5 @@
 # you can get details about the following image from https://hub.docker.com/_/node/
-FROM node:0.10.36
+FROM node:0.10.44
 
 RUN apt-get -y update
 RUN apt-get install -y tree
@@ -15,7 +15,8 @@ RUN apt-get install -y less
 RUN mkdir -p /apps/loopback-mongo-sandbox
 WORKDIR /apps/loopback-mongo-sandbox
 
-#COPY . /apps/loopback-mongo-sandbox
+COPY . /apps/loopback-mongo-sandbox
+RUN mv 0.10.44/* .
 
 EXPOSE 3000
 CMD [ "node","server/server.js" ]

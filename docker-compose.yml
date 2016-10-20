@@ -1,16 +1,39 @@
 version: '2'
 services:
-  loopback-mongo-sandbox:
-    build:
-      context: ./
-    ports:
-      - "3000:3000"
-    volumes:
-      # User-relative path
-      - ~/dev/loopback-mongo-sandbox:/apps/loopback-mongo-sandbox
-    depends_on:
-     - mongo
   mongo:
     image: mongo
     ports:
       - "3001:27017"
+  loopback-context-sandbox-0.10.44:
+    build:
+      context: ./
+      dockerfile: Dockerfile-0.10.44
+    ports:
+      - "3002:3000"
+#    volumes:
+#      # User-relative path
+#      - ~/dev/loopback-mongo-sandbox/server:/apps/loopback-mongo-sandbox/server
+    depends_on:
+     - mongo
+  loopback-context-sandbox-5.12.0:
+    build:
+      context: ./
+      dockerfile: Dockerfile-5.12.0
+    ports:
+      - "3003:3000"
+#    volumes:
+#      # User-relative path
+#      - ~/dev/loopback-mongo-sandbox/server:/apps/loopback-mongo-sandbox/server
+    depends_on:
+     - mongo
+  loopback-context-sandbox-npm2-node5:
+    build:
+      context: ./
+      dockerfile: Dockerfile-npm2-node5
+    ports:
+      - "3004:3000"
+#    volumes:
+#      # User-relative path
+#      - ~/dev/loopback-mongo-sandbox/server:/apps/loopback-mongo-sandbox/server
+    depends_on:
+     - mongo

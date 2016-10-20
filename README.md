@@ -1,3 +1,20 @@
+### Project Layout
+1. `0.10.44` - if node_modules is installed when the npm version is 2.x and node version is 0.10.x ... userContext can grab a valid value for loopback.getCurrentContext() to operate on when there is no accessToken and when there is an accessToken present
+1. if node_modules is ALREADY installed when the npm version was 2.x and node version was 0.10.x ... then node version is changed to 5.x and npm version is changed to 3.x ... again it works
+1. `npm2-node5` if npm-shrinkwrap.json from an npm-v2.x and node-v0.10.x based install is available ... and then versions are changed to npm-v3.x and node-v5.x ... and then the install is run but it is based off the pre-existing npm-shrinkwrap.json file ... then it also works. This is a better workaround than 2a in my opinion.
+1. `5.12.0` - if node_modules is installed when the npm version is 3.x and node version is 5.x ... userContext can grab a valid value for loopback.getCurrentContext() to operate on when there is no accessToken ... BUT not when an accessToken is present!!! ... this to me seems like a bug and exactly what kamal is experiencing a. is this a bug because of 5.x ... doesn't seem like it if you look at step 2 b. is this a bug because of how npm3 traverses and installs dependencies ... maybe! c. quick workaround? install dependencies with npm version 2.x and node version 0.10.x ... then switch over to using node5.x and npm3.x d. painful workaround? figure out why the dependency tree for step 3 is so screwed up and fix it ... this is tough because the structure of npm2 and npm3 shrinkwrap files is very very different
+
+### Notes
+1. npm3 is too smart, it does not rely on the package.json being present in present working directory so its a bit unpredictable to setup with ... Instead its better to move npm-shrinkwrap.json file, run isntall and then move it back:
+  1. cd npm2-node5 && \
+     mv ./npm-shrinkwrap.json ./.. && \
+     cd .. && \
+     npm install && \
+     mv ./npm-shrinkwrap.json ./npm2-node5 && \
+     mv ./node_modules ./npm2-node5/   && \
+  2. cd 5.12.0 && npm install
+
+
 ### FAQ
 * Why was this project created?
  * To provide a quick way to experiment with loopback and mongo together.
@@ -22,3 +39,22 @@ cd ~/dev/loopback-mongo-sandbox
 npm install
 docker-compose up
 ```
+
+curl -XPOST http://localhost:3002/api/Users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "one@one.com",
+    "password": "111111"
+  }'
+
+{"email":"one@one.com","id":"5807cd7e1d996a01008d79e3"}
+
+curl -XPOST http://localhost:3002/api/Users/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "one@one.com",
+    "password": "111111"
+  }'
+
+{"id":"14fY6XdoLJ7Cl9J0qwdDl1K9D7am8PT9N17RU1vWplXFlypFhfIYA6g77SBRQEgm","ttl":1209600,"created":"2016-10-19T19:46:30.314Z","userId":"5807cd7e1d996a01008d79e3"}
+
